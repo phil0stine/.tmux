@@ -42,7 +42,7 @@ tmux_conf_new_session_prompt=false
 # RGB 24-bit colour support (tmux >= 2.2), possible values are:
 #  - true
 #  - false (default)
-tmux_conf_theme_24b_colour=false
+tmux_conf_theme_24b_colour=true
 
 # window style
 tmux_conf_theme_window_fg='default'
@@ -55,7 +55,8 @@ tmux_conf_theme_highlight_focused_pane=false
 
 # focused pane colours:
 tmux_conf_theme_focused_pane_fg='default'
-tmux_conf_theme_focused_pane_bg='#0087d7'               # light blue
+tmux_conf_theme_focused_pane_bg='#080808'
+#tmux_conf_theme_focused_pane_bg='#0087d7'               # light blue
 
 # pane border style, possible values are:
 #   - thin (default)
@@ -64,7 +65,8 @@ tmux_conf_theme_pane_border_style=thin
 
 # pane borders colours:
 tmux_conf_theme_pane_border='#444444'                   # gray
-tmux_conf_theme_pane_active_border='#00afff'            # light blue
+tmux_conf_theme_pane_active_border='#080808'            # light blue
+#tmux_conf_theme_pane_active_border='#00afff'            # light blue
 
 # pane indicator colours
 tmux_conf_theme_pane_indicator='#00afff'                # light blue
@@ -179,21 +181,25 @@ tmux_conf_theme_right_separator_sub='|'
 #     - #{uptime_s}
 #     - #{username}
 #     - #{username_ssh}
-tmux_conf_theme_status_left=' ❐ #S | ↑#{?uptime_y, #{uptime_y}y,}#{?uptime_d, #{uptime_d}d,}#{?uptime_h, #{uptime_h}h,}#{?uptime_m, #{uptime_m}m,} '
-tmux_conf_theme_status_right='#{prefix}#{pairing}#{synchronized} #{?battery_status, #{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} , %R , %d %b | #{username}#{root} | #{hostname} '
+
+tmux_conf_theme_status_left=' #{circled_session_name} '
+tmux_conf_theme_status_right="#{prefix}#{pairing}#{synchronized} #{battery_percentage}#{battery_icon}, %R , %d %b | #{username} | #{hostname}"
+# tmux_conf_theme_status_right='#{prefix}#{pairing}#{synchronized} #{?battery_status, #{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} , %R , %d %b | #{username}#{username_ssh} | #{hostname} '
+# #(ip addr show dev wlp3s0 | grep inet[^6] | awk '{print $2}') #(ip addr show dev en0 | grep inet[^6] | awk '{print $2}') 
+
 
 # status left style
 tmux_conf_theme_status_left_fg='#000000,#e4e4e4,#e4e4e4'  # black, white , white
-tmux_conf_theme_status_left_bg='#ffff00,#ff00af,#00afff'  # yellow, pink, white blue
+tmux_conf_theme_status_left_bg='#fa4616,#0021a5,#00afff'
 tmux_conf_theme_status_left_attr='bold,none,none'
 
 # status right style
-tmux_conf_theme_status_right_fg='#8a8a8a,#e4e4e4,#000000' # light gray, white, black
-tmux_conf_theme_status_right_bg='#080808,#d70000,#e4e4e4' # dark gray, red, white
+tmux_conf_theme_status_right_fg='#8a8a8a,#00008a,#8a8a8a' # light gray, white, black
+tmux_conf_theme_status_right_bg='#080808,#fa4616,#0021a5'
 tmux_conf_theme_status_right_attr='none,none,bold'
 
 # pairing indicator
-tmux_conf_theme_pairing='👓 '          # U+1F453
+tmux_conf_theme_pairing='U+1F453'          # U+1F453
 tmux_conf_theme_pairing_fg='none'
 tmux_conf_theme_pairing_bg='none'
 tmux_conf_theme_pairing_attr='none'
@@ -211,7 +217,7 @@ tmux_conf_theme_root_bg='none'
 tmux_conf_theme_root_attr='bold,blink'
 
 # synchronized indicator
-tmux_conf_theme_synchronized='🔒'     # U+1F512
+tmux_conf_theme_synchronized='U+1F512'     # U+1F512
 tmux_conf_theme_synchronized_fg='none'
 tmux_conf_theme_synchronized_bg='none'
 tmux_conf_theme_synchronized_attr='none'
@@ -249,9 +255,9 @@ tmux_conf_battery_vbar_palette='gradient'
 #tmux_conf_battery_vbar_palette='#d70000,#ff5f00,#5fff00'  # red, orange, green
 
 # symbols used to indicate whether battery is charging or discharging
-tmux_conf_battery_status_charging='↑'       # U+2191
-tmux_conf_battery_status_discharging='↓'    # U+2193
-#tmux_conf_battery_status_charging='⚡ '    # U+26A1
+#tmux_conf_battery_status_charging='↑'       # U+2191
+#tmux_conf_battery_status_discharging='↓'    # U+2193
+tmux_conf_battery_status_charging='⚡ '    # U+26A1
 #tmux_conf_battery_status_charging='🔌 '    # U+1F50C
 #tmux_conf_battery_status_discharging='🔋 ' # U+1F50B
 
@@ -268,17 +274,16 @@ tmux_conf_theme_clock_style='24'
 #   - false (default)
 # on macOS, this requires installing reattach-to-user-namespace, see README.md
 # on Linux, this requires xsel or xclip
-tmux_conf_copy_to_os_clipboard=false
-
+tmux_conf_copy_to_os_clipboard=true
 
 # -- user customizations -------------------------------------------------------
 # this is the place to override or undo settings
 
 # increase history size
-#set -g history-limit 10000
+set -g history-limit 100000
 
 # start with mouse mode enabled
-#set -g mouse on
+set -g mouse on
 
 # force Vi mode
 #   really you should export VISUAL or EDITOR environment variable, see manual
@@ -294,3 +299,18 @@ tmux_conf_copy_to_os_clipboard=false
 
 # move status line to top
 #set -g status-position top
+
+
+
+# set -g @batt_icon_status_charging '⚡'
+# set -g @batt_icon_status_charged '⚡'
+# set -g status-right '#{cpu_bg_color} CPU: #{cpu_icon} #{cpu_percentage} | Online: #{online_status} | #{battery_percentage}#{battery_icon}| %a %h-%d %H:%M '
+
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-sensible'
+set -g @plugin 'tmux-plugins/tmux-cpu'
+# set -g @plugin 'thewtex/tmux-mem-cpu-load'
+set -g @plugin 'tmux-plugins/tmux-online-status'
+set -g @plugin 'tmux-plugins/tmux-battery'
+set -g @plugin 'tmux-plugins/tmux-yank'
+run -b '~/.tmux/plugins/tpm/tpm'
